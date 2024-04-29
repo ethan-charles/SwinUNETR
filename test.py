@@ -22,9 +22,9 @@ from monai.inferers import sliding_window_inference
 from monai.networks.nets import SwinUNETR
 
 parser = argparse.ArgumentParser(description="Swin UNETR segmentation pipeline")
-parser.add_argument("--data_dir", default="/dataset/dataset0/", type=str, help="dataset directory")
-parser.add_argument("--exp_name", default="test1", type=str, help="experiment name")
-parser.add_argument("--json_list", default="dataset_0.json", type=str, help="dataset json file")
+parser.add_argument("--data_dir", default="/root/dataset", type=str, help="dataset directory")
+parser.add_argument("--exp_name", default="test", type=str, help="experiment name")
+parser.add_argument("--json_list", default="dataset_validation.json", type=str, help="dataset json file")
 parser.add_argument("--fold", default=1, type=int, help="data fold")
 parser.add_argument("--pretrained_model_name", default="model.pt", type=str, help="pretrained model name")
 parser.add_argument("--feature_size", default=48, type=int, help="feature size")
@@ -97,7 +97,7 @@ def main():
             image = batch["image"].cuda()
             affine = batch["image_meta_dict"]["original_affine"][0].numpy()
             num = batch["image_meta_dict"]["filename_or_obj"][0].split("/")[-1].split("_")[1]
-            img_name = "BraTS2021_" + num + ".nii.gz"
+            img_name = "BraTS2020_" + num + ".nii.gz"
             print("Inference on case {}".format(img_name))
             prob = torch.sigmoid(model_inferer_test(image))
             seg = prob[0].detach().cpu().numpy()
